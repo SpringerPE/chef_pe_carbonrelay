@@ -5,7 +5,7 @@ default[:pe_carbonrelay][:environment] = node[:chef_environment]?node[:chef_envi
 
 # package and version
 default[:pe_carbonrelay][:version] = '0.36'
-default[:pe_carbonrelay][:download] = "http://artifactory.tools.springer-sbm.com/simple/spr-deb-release-local/pool/carbon-c-relay_#{node[:pe_carbonrelay][:version]}_amd64.deb"
+default[:pe_carbonrelay][:download] = nil
 default[:pe_carbonrelay][:checksum] = "1411b3890fe9c7d009cfd787ad7cfa7ab5664311"
 default[:pe_carbonrelay][:package] = "carbon-c-relay"
 
