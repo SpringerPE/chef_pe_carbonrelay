@@ -1,0 +1,26 @@
+{
+	"id": "relay",
+        "_default": {
+		"daemon": {
+			"default": {
+				"disable": false,
+				"interface": "0.0.0.0",
+				"port": 2003,
+				"cluster": {
+					"local": {
+						"mode": "forward",
+						"nodes": [
+							{"host": "127.0.0.1", "port": 2013, "proto": "udp"}
+						]
+					}
+				},
+				"rewrite": [
+					{"in": "(.+)", "out": "servers.\\1"}
+				],
+				"match": [
+					{ "expr": "*", "to": "local", "stop": false}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,80 @@
+#!/bin/sh
+#
+# carbon-c-relay - this script starts and stops the carbon-c-relay daemon
+#
+# chkconfig:    2345 80 80
+# description:  Carbon-like graphite line mode relay.
+# processname:  carbon-c-relay
+# config:       /etc/carbon/<%= @name %>.conf
+# pidfile:      /var/run/<%= @name %>.pid
+# Author: Fabian Groffen
+# Author: Jose Riguera <jose.riguera@springer.com>
+NAME="carbon-c-relay-<%= @name %>"
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+ 
+# Source networking configuration.
+. /etc/sysconfig/network
+ 
+# Check that networking is up.
+[ "$NETWORKING" = "no" ] && exit 0
+
+CONFIG=/etc/carbon/${NAME}.conf
+DAEMON_SYSCONFIG=/etc/sysconfig/${NAME}
+DAEMON=/usr/sbin/carbon-c-relay
+PIDFILE=/var/run/$NAME.pid
+OPTS="-f $CONFIG"
+LOCK_FILE=/var/lock/subsys/${NAME}
+DAEMON_USER="carbon"
+DISABLE=1
+
+[ -x $DAEMON ] || exit 5
+[ -f $DAEMON_SYSCONFIG ] || exit 6
+
+. ${DAEMON_SYSCONFIG}
+[ "$DISABLE" = "0" ] || exit 7
+RETVAL=0
+
+
+start() {
+  echo -n $"Starting Carbon C Relay: "
+  daemonize -u ${DAEMON_USER} -p ${PIDFILE} -l ${LOCK_FILE} ${DAEMON} ${OPTS} > /dev/null
+  RETVAL=$?
+  echo ""
+  return ${RETVAL}
+}
+
+stop() {
+    echo -n $"Stopping Carbon C Relay: "
+    killproc -p ${PIDFILE} -d 10 ${DAEMON}
+    RETVAL=$?
+    echo
+    [ $RETVAL = 0 ] && rm -f ${LOCK_FILE} ${PIDFILE}
+    return $RETVAL
+}  
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status -p ${PIDFILE} ${DAEMON}
+        RETVAL=$?
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        N=/etc/init.d/${NAME}
+        echo "Usage: $N {start|stop|status|restart}" >&2
+        RETVAL=2
+        ;;
+esac
+
+exit ${RETVAL}
+
