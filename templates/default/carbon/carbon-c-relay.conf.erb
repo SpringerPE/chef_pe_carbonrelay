@@ -1,0 +1,62 @@
+# File created automatically by chef! 
+#
+# comments are allowed in any place and start with a hash (#)
+#
+#cluster <name>
+#    <forward | any_of | <carbon_ch | fnv1a_ch> [replication <count>]>
+#        <host[:port] [proto <udp | tcp>]> ...
+#    ;
+#rewrite <expression>
+#    into <replacement>
+#    ;
+#aggregate
+#        <expression> ...
+#    every <interval> seconds
+#    expire after <expiration> seconds
+#    compute <sum | count | max | min | average> write to
+#        <metric>
+#    [compute ...]
+#    ;
+#match <* | <expression>>
+#    send to <cluster | blackhole>
+#    [stop]
+#    ;
+
+<% @daemon[:cluster].each do |key, value| -%>
+    <% unless value.empty? -%>
+cluster <%= key %>
+	<%= value['mode'] %>
+	<% value[:nodes].each do |node| -%>
+		<%= node['host'] %><% if node[:port] -%><%= ":#{node['port']}" %><% end -%> <% if node[:proto] -%><%= "proto #{node['proto']}" %><% end -%>
+	<% end -%>
+	;
+    <% end -%>
+<% end -%>
+
+<%- if @daemon[:rewrite] %>
+<% @daemon[:rewrite].each do |value| -%>
+rewrite <%= value['in'] %>
+	into <%= value['out'] %> ;
+<% end -%>
+<%- end %>
+
+<%- if @daemon[:aggregate] %>
+<% @daemon[:aggregate].each do |value| -%>
+aggregate 
+	<% value[:expr].each do |expr| -%>
+	<%= "#{expr} " %>
+	<% end -%>
+	every <%= value['interval'] %> seconds
+	<% value[:compute].each do |compute| -%>
+	compute <%= compute['mode'] %> write to <%= compute['dst'] %> 
+	<% end -%>
+	;
+<% end -%>
+<%- end %>
+
+<% @daemon[:match].each do |value| -%>
+match <%= value['expr'] %> send to <%= value['to'] %>
+        <% if value[:stop] -%><%= "stop" %><% end -%>;
+<% end -%>
+
+

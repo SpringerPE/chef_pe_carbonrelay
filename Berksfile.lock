@@ -1,0 +1,7 @@
+DEPENDENCIES
+  pe_carbonrelay
+    path: .
+    metadata: true
+
+GRAPH
+  pe_carbonrelay (0.1.0)
