@@ -50,12 +50,12 @@ default[:pe_carbonrelay][:daemon] = {
 #				]
 #			}
 #		},
-##		:rewrite => [
-##			{ :in => "(.+)", :out => 'server.\\1' }
-##		],
-#		:match => [
-#			{ :expr => "*", :to => "local", :stop => true }
-#		]
+#              "rules": [
+#                       {"type": "match", "expr": "sl.*", "to": "pe", "stop": true },
+#                       {"type": "match", "expr": "*", "to": "local", "stop": false },
+#                       {"type": "rewrite", "in": "(.+)", "out": "sl.\\1" },
+#                       {"type": "match", "expr": "*", "to": "pe", "stop": true }
+#               ]
 #	}
 } 
 ```
@@ -82,12 +82,12 @@ The easy way is just use a databag to define the way to forward the metrics
 						]
 					}
 				},
-				"rewrite": [
-					{"in": "(.+)", "out": "servers.\\1"}
-				],
-				"match": [
-					{ "expr": "*", "to": "local", "stop": false}
-				]
+                                "rules": [
+                                        {"type": "match", "expr": "sl.*", "to": "pe", "stop": true },
+                                        {"type": "match", "expr": "*", "to": "local", "stop": false },
+                                        {"type": "rewrite", "in": "(.+)", "out": "sl.\\1" },
+                                        {"type": "match", "expr": "*", "to": "pe", "stop": true }
+                                ]
 			}
 		}
 	}
