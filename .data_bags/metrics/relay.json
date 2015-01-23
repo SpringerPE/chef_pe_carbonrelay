@@ -12,14 +12,20 @@
 						"nodes": [
 							{"host": "127.0.0.1", "port": 2013, "proto": "udp"}
 						]
+					},
+					"pe": {
+						"mode": "forward",
+						"nodes": [
+							{"host": "10.0.0.1", "port": 2013, "proto": "udp"}
+						]
 					}
 				},
-				"rewrite": [
-					{"in": "(.+)", "out": "servers.\\1"}
-				],
-				"match": [
-					{ "expr": "*", "to": "local", "stop": false}
-				]
+                                "rules": [
+                                        {"type": "match", "expr": "sl.*", "to": "pe", "stop": true },
+                                        {"type": "match", "expr": "*", "to": "local", "stop": false },
+                                        {"type": "rewrite", "in": "(.+)", "out": "sl.\\1" },
+                                        {"type": "match", "expr": "*", "to": "pe", "stop": true }
+                                ]
 			}
 		}
 	}
