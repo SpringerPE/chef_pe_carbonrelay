@@ -34,7 +34,7 @@ config.each_pair do |name, value|
            :queuesize => value[:queuesize] ? "-q #{value[:queuesize]}" : nil,
            :hoststats => value[:hoststats] ? "-H #{value[:hoststats]}" : nil,
        })
-       notifies :create, "template[carbon-c-relay-#{name}]", :delayed
+       notifies :create, "template[carbon-c-relay-#{name}]", :immediately
    end
 
    template "/etc/carbon/carbon-c-relay-#{name}.conf" do
@@ -46,7 +46,7 @@ config.each_pair do |name, value|
        variables({
            :daemon => value
        })
-       notifies :create, "template[carbon-c-relay-#{name}]", :delayed
+       notifies :create, "template[carbon-c-relay-#{name}]", :immediately
    end
 
    template "carbon-c-relay-#{name}" do
@@ -59,13 +59,14 @@ config.each_pair do |name, value|
       variables({
            :name => name
       })
-      notifies :enable, "service[carbon-c-relay-#{name}]", :delayed
-      notifies :start, "service[carbon-c-relay-#{name}]", :delayed
+      notifies :enable, "service[carbon-c-relay-#{name}]", :immediately
+      notifies :start, "service[carbon-c-relay-#{name}]", :immediately
    end
 
    service "carbon-c-relay-#{name}" do
+      init_command "/etc/init.d/carbon-c-relay-#{name}"
       supports :restart => true, :start => true, :stop => true
-      action :nothing
+      action [ :enable, :start ]
    end 
 
 end
