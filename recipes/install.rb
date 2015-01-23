@@ -6,11 +6,23 @@
 # 
 
 if node[:pe_carbonrelay][:download]
+
    remote_file "/var/tmp/carbon-c-relay.package" do
       source node[:pe_carbonrelay][:download]
       checksum node[:pe_carbonrelay][:checksum]
       action :create
+      notifies :install, "package[openssl]", :immediately
+   end
+
+   package "openssl" do
+      action :upgrade
       notifies :install, "package[#{node[:pe_carbonrelay][:package]}]", :immediately
+     case node[:platform]
+     when "ubuntu","debian"
+        provider Chef::Provider::Package::Apt
+     when "centos", "rh"
+        provider Chef::Provider::Package::Yum
+     end
    end
 
    package node[:pe_carbonrelay][:package] do
@@ -24,6 +36,7 @@ if node[:pe_carbonrelay][:download]
         provider Chef::Provider::Package::Rpm
      end
    end
+
 else
    package node[:pe_carbonrelay][:package]
 end
