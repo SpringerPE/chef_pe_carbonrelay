@@ -3,7 +3,7 @@
 Cookbook to setup graphite carbon relay proxies in a flexible way. 
 It supports all carbon-c-relay parameters and it can read all of them from a databag.
 
-For more informacion go: https://github.com/jriguera/carbon-c-relay
+For more information go to: https://github.com/jriguera/carbon-c-relay
 
 ## Supported Platforms
 
@@ -12,12 +12,12 @@ For more informacion go: https://github.com/jriguera/carbon-c-relay
  * Centos
  * RedHat
 
-Note: at this moment, there is no available package for RH/Centos platforms, but the
+Note: at this moment, there is no package available for RH/Centos platforms, but the
 cookbook supports them.
 
 ## Attributes
 
-To can define the attributes, or use a databag to read and setup all of them.
+You can define the attributes, or use a databag to read and setup all of them.
 For instance, here you see the attribute file of this cookbook:
 
 ```
