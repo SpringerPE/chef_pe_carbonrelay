@@ -33,12 +33,20 @@ cluster <%= key %>
     <% end -%>
 <% end -%>
 
-<%- if @daemon[:rewrite] %>
-<% @daemon[:rewrite].each do |value| -%>
-rewrite <%= value['in'] %>
-	into <%= value['out'] %> ;
-<% end -%>
+
+<% @daemon[:rules].each do |value| -%>
+<%- if value[:type]=="match" %>
+match <%= value['expr'] %> send to <%= value['to'] %>
+        <% if value[:stop] -%><%= "stop" %><% end -%>;
 <%- end %>
+
+<%- if value[:type]=="rewrite" %>
+rewrite <%= value['in'] %>
+        into <%= value['out'] %> ;
+<%- end %>
+
+<%- end %>
+
 
 <%- if @daemon[:aggregate] %>
 <% @daemon[:aggregate].each do |value| -%>
@@ -53,10 +61,4 @@ aggregate
 	;
 <% end -%>
 <%- end %>
-
-<% @daemon[:match].each do |value| -%>
-match <%= value['expr'] %> send to <%= value['to'] %>
-        <% if value[:stop] -%><%= "stop" %><% end -%>;
-<% end -%>
-
 

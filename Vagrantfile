@@ -8,11 +8,13 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "chef-spr-carbonrelay-berkshelf"
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu/trusty64"
+  #config.vm.box = "ubuntu/trusty64"
+  #config.vm.box = "nrel/CentOS-6.5-x86_64"
+  config.vm.box = "nrel/CentOS-6.3-x86_64"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  #config.vm.box_url = "https://dl.dropbox.com/u/31081437/Berkshelf-CentOS-6.3-x86_64-minimal.box"
+  config.vm.box_url = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.3-x86_64-v20130101.box"
 
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
@@ -71,7 +73,7 @@ Vagrant.configure("2") do |config|
   # to skip installing and copying to Vagrant's shelf.
   # config.berkshelf.except = []
 
-  config.omnibus.chef_version = "11.12"
+  config.omnibus.chef_version = "11.4.4"
 
   config.vm.provision :chef_solo do |chef|
     chef.data_bags_path = ".data_bags"
