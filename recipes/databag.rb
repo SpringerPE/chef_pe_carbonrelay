@@ -9,7 +9,7 @@ class ::Chef::Recipe
   include SPRpe
 end
 
-if node[:pe_carbonrelay][:bag_name]
+if node[:pe_carbonrelay][:bag_name] and not node[:pe_carbonrelay][:bag_name].nil?
   begin
     databag = node[:pe_carbonrelay][:data_bag]
     bagname = node[:pe_carbonrelay][:bag_name]
