@@ -4,4 +4,4 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  pe_carbonrelay (0.1.0)
+  pe_carbonrelay (0.1.1)
