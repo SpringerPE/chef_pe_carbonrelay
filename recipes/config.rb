@@ -5,6 +5,12 @@
 # Copyright (C) 2014 Jose Riguera
 # 
 
+service "carbon-c-relay" do
+      init_command "/etc/init.d/carbon-c-relay"
+      supports :restart => true, :start => true, :stop => true
+      action [ :disable, :stop ]
+end 
+
 config = node[:pe_carbonrelay][:daemon]
 config.each_pair do |name, value|
 
@@ -70,3 +76,4 @@ config.each_pair do |name, value|
    end 
 
 end
+
